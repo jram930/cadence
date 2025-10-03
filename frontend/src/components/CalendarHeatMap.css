@@ -19,17 +19,18 @@
 }
 
 .heatmap__container {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr;
   gap: var(--spacing-sm);
   overflow-x: auto;
   padding-bottom: var(--spacing-md);
+  width: 100%;
 }
 
 .heatmap__days {
   display: flex;
   flex-direction: column;
   gap: 2px;
-  padding-top: 20px;
 }
 
 .heatmap__day-label {
@@ -38,12 +39,15 @@
   color: var(--color-text-tertiary);
   display: flex;
   align-items: center;
+  justify-content: flex-end;
+  padding-right: var(--spacing-xs);
 }
 
 .heatmap__grid {
   display: flex;
   gap: 2px;
-  flex: 1;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .heatmap__week {

@@ -9,6 +9,7 @@ import './Home.css';
 
 export const Home: React.FC = () => {
   const [todayEntry, setTodayEntry] = useState<Entry | null>(null);
+  const [allEntries, setAllEntries] = useState<Entry[]>([]);
   const [streakData, setStreakData] = useState<StreakData | null>(null);
   const [heatMapData, setHeatMapData] = useState<HeatMapData[]>([]);
   const [loading, setLoading] = useState(true);
@@ -23,13 +24,15 @@ export const Home: React.FC = () => {
   const loadData = async () => {
     try {
       setLoading(true);
-      const [entry, streak, heatmap] = await Promise.all([
+      const [entry, entries, streak, heatmap] = await Promise.all([
         api.getEntryByDate(today),
+        api.getEntries(),
         api.getStreakData(),
         api.getHeatMapData(365),
       ]);
 
       setTodayEntry(entry);
+      setAllEntries(entries);
       setStreakData(streak);
       setHeatMapData(heatmap);
     } catch (error) {
@@ -80,6 +83,10 @@ export const Home: React.FC = () => {
     }
   };
 
+  const isToday = (entryDate: string) => {
+    return entryDate === today;
+  };
+
   return (
     <div className="home">
       <div className="container">
@@ -92,45 +99,80 @@ export const Home: React.FC = () => {
 
         <StreakCounter data={streakData} loading={loading} />
 
-        {!todayEntry || editMode ? (
-          <EntryForm
-            entry={todayEntry}
-            onSubmit={handleSubmit}
-            onCancel={todayEntry && editMode ? () => setEditMode(false) : undefined}
-          />
-        ) : (
-          <div className="entry-display">
-            <div className="entry-display__header">
-              <h2>Today's Entry</h2>
-              <div className="entry-display__actions">
-                <button
-                  className="button button--icon"
-                  onClick={() => setEditMode(true)}
-                  aria-label="Edit entry"
-                >
-                  ✏️
-                </button>
-                <button
-                  className="button button--icon button--danger"
-                  onClick={handleDelete}
-                  aria-label="Delete entry"
-                >
-                  🗑️
-                </button>
-              </div>
-            </div>
-            <div className="entry-display__content">
-              <div className="entry-display__mood">
-                Mood: <span className="mood-badge mood-badge--{todayEntry.mood}">
-                  {todayEntry.mood}
-                </span>
-              </div>
-              <p className="entry-display__text">{todayEntry.content}</p>
-            </div>
-          </div>
-        )}
-
         <CalendarHeatMap data={heatMapData} onDateClick={handleDateClick} />
+
+        <div className="entries-list">
+          <h2 className="entries-list__title">Journal Entries</h2>
+
+          {!todayEntry || editMode ? (
+            <EntryForm
+              entry={todayEntry}
+              onSubmit={handleSubmit}
+              onCancel={todayEntry && editMode ? () => setEditMode(false) : undefined}
+            />
+          ) : null}
+
+          <div className="entries-list__scroll">
+            {allEntries.map((entry) => {
+              const isTodayEntry = isToday(entry.entryDate);
+
+              if (isTodayEntry && !editMode) {
+                return (
+                  <div key={entry.id} className="entry-display entry-display--today">
+                    <div className="entry-display__header">
+                      <div className="entry-display__date">
+                        {format(new Date(entry.entryDate), 'EEEE, MMMM d, yyyy')} (Today)
+                      </div>
+                      <div className="entry-display__actions">
+                        <button
+                          className="button button--icon"
+                          onClick={() => setEditMode(true)}
+                          aria-label="Edit entry"
+                        >
+                          ✏️
+                        </button>
+                        <button
+                          className="button button--icon button--danger"
+                          onClick={handleDelete}
+                          aria-label="Delete entry"
+                        >
+                          🗑️
+                        </button>
+                      </div>
+                    </div>
+                    <div className="entry-display__content">
+                      <div className="entry-display__mood">
+                        Mood: <span className={`mood-badge mood-badge--${entry.mood}`}>
+                          {entry.mood}
+                        </span>
+                      </div>
+                      <p className="entry-display__text">{entry.content}</p>
+                    </div>
+                  </div>
+                );
+              } else if (!isTodayEntry) {
+                return (
+                  <div key={entry.id} className="entry-display entry-display--past">
+                    <div className="entry-display__header">
+                      <div className="entry-display__date">
+                        {format(new Date(entry.entryDate), 'EEEE, MMMM d, yyyy')}
+                      </div>
+                    </div>
+                    <div className="entry-display__content">
+                      <div className="entry-display__mood">
+                        Mood: <span className={`mood-badge mood-badge--${entry.mood}`}>
+                          {entry.mood}
+                        </span>
+                      </div>
+                      <p className="entry-display__text">{entry.content}</p>
+                    </div>
+                  </div>
+                );
+              }
+              return null;
+            })}
+          </div>
+        </div>
       </div>
     </div>
   );
