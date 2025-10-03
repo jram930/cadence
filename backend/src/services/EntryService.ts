@@ -123,35 +123,26 @@ export class EntryService {
       };
     }
 
-    let currentStreak = 0;
-    let longestStreak = 0;
-    let tempStreak = 1;
+    // Calculate current streak (starting from most recent entry)
+    let currentStreak = 1;
     let expectedDate = mostRecentEntry;
-
-    // Start counting from the most recent entry
-    currentStreak = 1;
 
     for (let i = 1; i < entries.length; i++) {
       const entryDate = startOfDay(new Date(entries[i].entryDate));
-      const prevDate = subDays(expectedDate, 1);
       const daysDiff = differenceInDays(expectedDate, entryDate);
 
       if (daysDiff === 1) {
         // Consecutive day
-        tempStreak++;
-        if (i === entries.length - 1 || differenceInDays(today, mostRecentEntry) <= 1) {
-          currentStreak = tempStreak;
-        }
+        currentStreak++;
         expectedDate = entryDate;
       } else {
-        // Streak broken
-        longestStreak = Math.max(longestStreak, tempStreak);
-        tempStreak = 1;
-        expectedDate = entryDate;
+        // Streak broken, stop counting current streak
+        break;
       }
     }
 
-    longestStreak = Math.max(longestStreak, tempStreak, currentStreak);
+    // Calculate longest streak from all entries
+    const longestStreak = Math.max(currentStreak, this.calculateLongestStreak(entries));
 
     return {
       currentStreak,
