@@ -1,0 +1,60 @@
+.streak-counter {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-xl);
+}
+
+.streak-counter__loading {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: var(--spacing-xl);
+  color: var(--color-text-secondary);
+}
+
+.streak-stat {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg);
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  transition: all var(--transition-fast);
+}
+
+.streak-stat:hover {
+  background-color: var(--color-bg-hover);
+  border-color: var(--color-accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.streak-stat__icon {
+  font-size: 2rem;
+  line-height: 1;
+  filter: grayscale(0.3);
+}
+
+.streak-stat:hover .streak-stat__icon {
+  filter: grayscale(0);
+}
+
+.streak-stat__content {
+  flex: 1;
+}
+
+.streak-stat__value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  line-height: 1.2;
+}
+
+.streak-stat__label {
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}

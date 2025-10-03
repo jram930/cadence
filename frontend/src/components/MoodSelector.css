@@ -1,0 +1,58 @@
+.mood-selector {
+  margin-bottom: var(--spacing-lg);
+}
+
+.mood-selector__label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.mood-selector__options {
+  display: flex;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+.mood-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-md);
+  background-color: var(--color-bg-secondary);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  transition: all var(--transition-fast);
+  flex: 1;
+  min-width: 80px;
+}
+
+.mood-option:hover {
+  background-color: var(--color-bg-hover);
+  border-color: var(--color-border-light);
+  transform: translateY(-2px);
+}
+
+.mood-option--selected {
+  background-color: var(--color-bg-tertiary);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.1);
+}
+
+.mood-option__emoji {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.mood-option__label {
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+
+.mood-option--selected .mood-option__label {
+  color: var(--color-accent);
+}
