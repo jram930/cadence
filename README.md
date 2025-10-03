@@ -2,8 +2,7 @@
 
 A beautiful micro-journaling app with mood tracking, streak counters, and calendar heat maps.
 
-<img width="1222" height="1161" alt="image" src="https://github.com/user-attachments/assets/cd9ae5f7-b2db-480a-ac16-6b7f2544e8cd" />
-
+<img width="1197" height="1217" alt="image" src="https://github.com/user-attachments/assets/9a3ac8ab-d3fd-4764-848c-d4395e4e0754" />
 
 ## Tech Stack
 
