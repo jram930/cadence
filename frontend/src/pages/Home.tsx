@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { api } from '../services/api';
-import { MoodType, StreakData, HeatMapData, Entry } from '../types';
-import { EntryForm } from '../components/EntryForm';
-import { StreakCounter } from '../components/StreakCounter';
-import { CalendarHeatMap } from '../components/CalendarHeatMap';
-import { AIChat } from '../components/AIChat';
+import { MoodType, StreakData, HeatMapData, AverageMoodData, Entry } from '../types';
+import { SideNav, View } from '../components/SideNav';
+import { JournalView } from '../components/JournalView';
+import { StatsView } from '../components/StatsView';
+import { AIView } from '../components/AIView';
 import './Home.css';
 
 export const Home: React.FC = () => {
+  const [currentView, setCurrentView] = useState<View>('journal');
   const [todayEntry, setTodayEntry] = useState<Entry | null>(null);
   const [allEntries, setAllEntries] = useState<Entry[]>([]);
   const [streakData, setStreakData] = useState<StreakData | null>(null);
   const [heatMapData, setHeatMapData] = useState<HeatMapData[]>([]);
+  const [averageMoodData, setAverageMoodData] = useState<AverageMoodData | null>(null);
   const [loading, setLoading] = useState(true);
   const [editMode, setEditMode] = useState(false);
 
@@ -25,17 +27,19 @@ export const Home: React.FC = () => {
   const loadData = async () => {
     try {
       setLoading(true);
-      const [entry, entries, streak, heatmap] = await Promise.all([
+      const [entry, entries, streak, heatmap, averageMood] = await Promise.all([
         api.getEntryByDate(today),
         api.getEntries(),
         api.getStreakData(),
         api.getHeatMapData(365),
+        api.getAverageMoodData(),
       ]);
 
       setTodayEntry(entry);
       setAllEntries(entries);
       setStreakData(streak);
       setHeatMapData(heatmap);
+      setAverageMoodData(averageMood);
     } catch (error) {
       console.error('Error loading data:', error);
     } finally {
@@ -84,98 +88,43 @@ export const Home: React.FC = () => {
     }
   };
 
-  const isToday = (entryDate: string) => {
-    return entryDate === today;
+  const renderView = () => {
+    switch (currentView) {
+      case 'journal':
+        return (
+          <JournalView
+            todayEntry={todayEntry}
+            allEntries={allEntries}
+            editMode={editMode}
+            loading={loading}
+            onSubmit={handleSubmit}
+            onCancel={() => setEditMode(false)}
+            onEdit={() => setEditMode(true)}
+            onDelete={handleDelete}
+          />
+        );
+      case 'stats':
+        return (
+          <StatsView
+            streakData={streakData}
+            heatMapData={heatMapData}
+            averageMoodData={averageMoodData}
+            loading={loading}
+            onDateClick={handleDateClick}
+          />
+        );
+      case 'ai':
+        return <AIView />;
+      default:
+        return null;
+    }
   };
 
   return (
     <div className="home">
-      <div className="container">
-        <header className="home__header">
-          <h1 className="home__title">Micro Journal</h1>
-          <p className="home__subtitle">
-            {format(new Date(), 'EEEE, MMMM d, yyyy')}
-          </p>
-        </header>
-
-        <StreakCounter data={streakData} loading={loading} />
-
-        <CalendarHeatMap data={heatMapData} onDateClick={handleDateClick} />
-
-        <AIChat />
-
-        <div className="entries-list">
-          <h2 className="entries-list__title">Journal Entries</h2>
-
-          {!todayEntry || editMode ? (
-            <EntryForm
-              entry={todayEntry}
-              onSubmit={handleSubmit}
-              onCancel={todayEntry && editMode ? () => setEditMode(false) : undefined}
-            />
-          ) : null}
-
-          <div className="entries-list__scroll">
-            {allEntries.map((entry) => {
-              const isTodayEntry = isToday(entry.entryDate);
-
-              if (isTodayEntry && !editMode) {
-                return (
-                  <div key={entry.id} className="entry-display entry-display--today">
-                    <div className="entry-display__header">
-                      <div className="entry-display__date">
-                        {format(new Date(entry.entryDate), 'EEEE, MMMM d, yyyy')} (Today)
-                      </div>
-                      <div className="entry-display__actions">
-                        <button
-                          className="button button--icon"
-                          onClick={() => setEditMode(true)}
-                          aria-label="Edit entry"
-                        >
-                          ✏️
-                        </button>
-                        <button
-                          className="button button--icon button--danger"
-                          onClick={handleDelete}
-                          aria-label="Delete entry"
-                        >
-                          🗑️
-                        </button>
-                      </div>
-                    </div>
-                    <div className="entry-display__content">
-                      <div className="entry-display__mood">
-                        Mood: <span className={`mood-badge mood-badge--${entry.mood}`}>
-                          {entry.mood}
-                        </span>
-                      </div>
-                      <p className="entry-display__text">{entry.content}</p>
-                    </div>
-                  </div>
-                );
-              } else if (!isTodayEntry) {
-                return (
-                  <div key={entry.id} className="entry-display entry-display--past">
-                    <div className="entry-display__header">
-                      <div className="entry-display__date">
-                        {format(new Date(entry.entryDate), 'EEEE, MMMM d, yyyy')}
-                      </div>
-                    </div>
-                    <div className="entry-display__content">
-                      <div className="entry-display__mood">
-                        Mood: <span className={`mood-badge mood-badge--${entry.mood}`}>
-                          {entry.mood}
-                        </span>
-                      </div>
-                      <p className="entry-display__text">{entry.content}</p>
-                    </div>
-                  </div>
-                );
-              }
-              return null;
-            })}
-          </div>
-        </div>
+      <SideNav currentView={currentView} onViewChange={setCurrentView} />
+      <div className="home__content">
+        {renderView()}
       </div>
     </div>
   );

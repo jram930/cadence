@@ -17,6 +17,7 @@ router.delete('/entries/:id', entryController.deleteEntry);
 // Analytics routes
 router.get('/streak', entryController.getStreakData);
 router.get('/heatmap', entryController.getHeatMapData);
+router.get('/average-mood', entryController.getAverageMoodData);
 
 // AI routes
 router.post('/ai/query', aiController.query);

@@ -1,7 +1,7 @@
 import { Repository, Between, MoreThanOrEqual } from 'typeorm';
 import { AppDataSource } from '../config/data-source';
 import { Entry } from '../entities/Entry';
-import { CreateEntryDto, UpdateEntryDto, StreakData, HeatMapData } from '../types';
+import { CreateEntryDto, UpdateEntryDto, StreakData, HeatMapData, AverageMoodData, MoodType } from '../types';
 import { startOfDay, subDays, differenceInDays, format } from 'date-fns';
 
 export class EntryService {
@@ -206,5 +206,49 @@ export class EntryService {
     }
 
     return heatMap.reverse();
+  }
+
+  async getAverageMoodData(userId: string): Promise<AverageMoodData> {
+    const today = startOfDay(new Date());
+
+    // Mood values for calculation
+    const moodValues: Record<string, number> = {
+      'terrible': 1,
+      'bad': 2,
+      'okay': 3,
+      'good': 4,
+      'amazing': 5,
+    };
+
+    // Get entries for last 90 days
+    const startDate = subDays(today, 90);
+    const entries = await this.entryRepository.find({
+      where: {
+        userId,
+        entryDate: Between(startDate, today),
+      },
+      order: { entryDate: 'DESC' },
+    });
+
+    const calculateAverage = (days: number): number => {
+      const cutoffDate = subDays(today, days);
+      const filteredEntries = entries.filter(entry =>
+        new Date(entry.entryDate) >= cutoffDate
+      );
+
+      if (filteredEntries.length === 0) return 0;
+
+      const sum = filteredEntries.reduce((acc, entry) => {
+        return acc + moodValues[entry.mood];
+      }, 0);
+
+      return sum / filteredEntries.length;
+    };
+
+    return {
+      last7Days: calculateAverage(7),
+      last30Days: calculateAverage(30),
+      last90Days: calculateAverage(90),
+    };
   }
 }

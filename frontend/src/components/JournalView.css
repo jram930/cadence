@@ -1,0 +1,145 @@
+.journal-view {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.journal-view__header {
+  margin-bottom: var(--spacing-2xl);
+}
+
+.journal-view__title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.journal-view__subtitle {
+  color: var(--color-text-secondary);
+  font-size: 1rem;
+}
+
+.journal-view__form {
+  margin-bottom: var(--spacing-2xl);
+}
+
+.journal-view__entries {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  max-height: calc(100vh - 300px);
+  overflow-y: auto;
+  padding-right: var(--spacing-sm);
+}
+
+.journal-view__entries::-webkit-scrollbar {
+  width: 8px;
+}
+
+.journal-view__entries::-webkit-scrollbar-track {
+  background: var(--color-bg-tertiary);
+  border-radius: var(--radius-sm);
+}
+
+.journal-view__entries::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+.journal-view__entries::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent);
+}
+
+.journal-view__loading,
+.journal-view__empty {
+  text-align: center;
+  padding: var(--spacing-2xl);
+  color: var(--color-text-secondary);
+}
+
+.entry-card {
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+}
+
+.entry-card--today {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 1px var(--color-accent);
+}
+
+.entry-card--past {
+  opacity: 0.9;
+}
+
+.entry-card--past:hover {
+  opacity: 1;
+  border-color: var(--color-text-tertiary);
+}
+
+.entry-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.entry-card__date {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+.entry-card__actions {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.entry-card__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.entry-card__mood {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+}
+
+.mood-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.mood-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.entry-card__text {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--color-text-primary);
+  white-space: pre-wrap;
+}
+
+@media (max-width: 768px) {
+  .journal-view__title {
+    font-size: 1.5rem;
+  }
+
+  .entry-card__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+  }
+}

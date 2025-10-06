@@ -1,0 +1,30 @@
+.ai-view {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.ai-view__header {
+  margin-bottom: var(--spacing-2xl);
+}
+
+.ai-view__title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.ai-view__subtitle {
+  color: var(--color-text-secondary);
+  font-size: 1rem;
+}
+
+.ai-view__content {
+  /* Content styling handled by AIChat component */
+}
+
+@media (max-width: 768px) {
+  .ai-view__title {
+    font-size: 1.5rem;
+  }
+}

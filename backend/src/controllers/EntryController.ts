@@ -149,4 +149,16 @@ export class EntryController {
       res.status(500).json({ error: 'Failed to fetch heat map data' });
     }
   };
+
+  getAverageMoodData = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const userId = req.headers['x-user-id'] as string || DEFAULT_USER_ID;
+
+      const averageMoodData = await this.entryService.getAverageMoodData(userId);
+      res.json(averageMoodData);
+    } catch (error) {
+      console.error('Error fetching average mood data:', error);
+      res.status(500).json({ error: 'Failed to fetch average mood data' });
+    }
+  };
 }

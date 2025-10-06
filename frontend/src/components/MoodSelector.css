@@ -42,9 +42,20 @@
   box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.1);
 }
 
-.mood-option__emoji {
-  font-size: 2rem;
-  line-height: 1;
+.mood-option__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-secondary);
+  transition: color var(--transition-fast);
+}
+
+.mood-option:hover .mood-option__icon {
+  color: var(--color-text-primary);
+}
+
+.mood-option--selected .mood-option__icon {
+  color: var(--color-accent);
 }
 
 .mood-option__label {

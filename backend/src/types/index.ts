@@ -37,3 +37,9 @@ export interface HeatMapData {
   count: number;
   mood?: MoodType;
 }
+
+export interface AverageMoodData {
+  last7Days: number;
+  last30Days: number;
+  last90Days: number;
+}

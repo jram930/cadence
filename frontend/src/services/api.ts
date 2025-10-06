@@ -1,4 +1,4 @@
-import { Entry, CreateEntryDto, UpdateEntryDto, StreakData, HeatMapData } from '../types';
+import { Entry, CreateEntryDto, UpdateEntryDto, StreakData, HeatMapData, AverageMoodData } from '../types';
 
 const API_BASE_URL = '/api';
 
@@ -116,6 +116,18 @@ export const api = {
 
     if (!response.ok) {
       throw new Error('Failed to fetch heat map data');
+    }
+
+    return response.json();
+  },
+
+  async getAverageMoodData(): Promise<AverageMoodData> {
+    const response = await fetch(`${API_BASE_URL}/average-mood`, {
+      headers,
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch average mood data');
     }
 
     return response.json();

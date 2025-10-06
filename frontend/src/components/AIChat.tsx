@@ -49,13 +49,6 @@ export const AIChat: React.FC = () => {
 
   return (
     <div className="ai-chat">
-      <div className="ai-chat__header">
-        <h2 className="ai-chat__title">🤖 Ask About Your Journal</h2>
-        <p className="ai-chat__subtitle">
-          Ask questions about your journal entries in natural language
-        </p>
-      </div>
-
       <form onSubmit={handleSubmit} className="ai-chat__form">
         <div className="ai-chat__input-group">
           <input

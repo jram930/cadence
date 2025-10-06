@@ -1,5 +1,6 @@
 import React from 'react';
 import { MoodType } from '../types';
+import { MoodIcon } from './MoodIcon';
 import './MoodSelector.css';
 
 interface MoodSelectorProps {
@@ -7,12 +8,12 @@ interface MoodSelectorProps {
   onChange: (mood: MoodType) => void;
 }
 
-const moods: { type: MoodType; emoji: string; label: string }[] = [
-  { type: MoodType.AMAZING, emoji: '🤩', label: 'Amazing' },
-  { type: MoodType.GOOD, emoji: '😊', label: 'Good' },
-  { type: MoodType.OKAY, emoji: '😐', label: 'Okay' },
-  { type: MoodType.BAD, emoji: '😞', label: 'Bad' },
-  { type: MoodType.TERRIBLE, emoji: '😢', label: 'Terrible' },
+const moods: { type: MoodType; label: string }[] = [
+  { type: MoodType.TERRIBLE, label: 'Terrible' },
+  { type: MoodType.BAD, label: 'Bad' },
+  { type: MoodType.OKAY, label: 'Okay' },
+  { type: MoodType.GOOD, label: 'Good' },
+  { type: MoodType.AMAZING, label: 'Amazing' },
 ];
 
 export const MoodSelector: React.FC<MoodSelectorProps> = ({ value, onChange }) => {
@@ -28,7 +29,9 @@ export const MoodSelector: React.FC<MoodSelectorProps> = ({ value, onChange }) =
             onClick={() => onChange(mood.type)}
             aria-label={mood.label}
           >
-            <span className="mood-option__emoji">{mood.emoji}</span>
+            <span className="mood-option__icon">
+              <MoodIcon mood={mood.type} size={24} />
+            </span>
             <span className="mood-option__label">{mood.label}</span>
           </button>
         ))}

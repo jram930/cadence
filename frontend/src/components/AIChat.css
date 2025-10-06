@@ -3,22 +3,6 @@
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   padding: var(--spacing-xl);
-  margin-bottom: var(--spacing-xl);
-}
-
-.ai-chat__header {
-  margin-bottom: var(--spacing-lg);
-}
-
-.ai-chat__title {
-  font-size: 1.5rem;
-  margin-bottom: var(--spacing-xs);
-  color: var(--color-text-primary);
-}
-
-.ai-chat__subtitle {
-  color: var(--color-text-secondary);
-  font-size: 0.875rem;
 }
 
 .ai-chat__form {
