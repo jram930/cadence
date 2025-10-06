@@ -2,12 +2,12 @@ import { Entry, CreateEntryDto, UpdateEntryDto, StreakData, HeatMapData, Average
 
 const API_BASE_URL = '/api';
 
-// Simple user ID for prototype (would use auth token in production)
-const USER_ID = '00000000-0000-0000-0000-000000000001';
-
-const headers = {
-  'Content-Type': 'application/json',
-  'X-User-Id': USER_ID,
+const getHeaders = () => {
+  const token = localStorage.getItem('auth_token');
+  return {
+    'Content-Type': 'application/json',
+    ...(token && { Authorization: `Bearer ${token}` }),
+  };
 };
 
 export const api = {
@@ -15,7 +15,7 @@ export const api = {
   async createEntry(data: CreateEntryDto): Promise<Entry> {
     const response = await fetch(`${API_BASE_URL}/entries`, {
       method: 'POST',
-      headers,
+      headers: getHeaders(),
       body: JSON.stringify(data),
     });
 
@@ -33,7 +33,7 @@ export const api = {
     if (endDate) params.append('endDate', endDate);
 
     const response = await fetch(`${API_BASE_URL}/entries?${params.toString()}`, {
-      headers,
+      headers: getHeaders(),
     });
 
     if (!response.ok) {
@@ -45,7 +45,7 @@ export const api = {
 
   async getEntry(id: string): Promise<Entry> {
     const response = await fetch(`${API_BASE_URL}/entries/${id}`, {
-      headers,
+      headers: getHeaders(),
     });
 
     if (!response.ok) {
@@ -57,7 +57,7 @@ export const api = {
 
   async getEntryByDate(date: string): Promise<Entry | null> {
     const response = await fetch(`${API_BASE_URL}/entries/date/${date}`, {
-      headers,
+      headers: getHeaders(),
     });
 
     if (response.status === 404) {
@@ -74,7 +74,7 @@ export const api = {
   async updateEntry(id: string, data: UpdateEntryDto): Promise<Entry> {
     const response = await fetch(`${API_BASE_URL}/entries/${id}`, {
       method: 'PUT',
-      headers,
+      headers: getHeaders(),
       body: JSON.stringify(data),
     });
 
@@ -88,7 +88,7 @@ export const api = {
   async deleteEntry(id: string): Promise<void> {
     const response = await fetch(`${API_BASE_URL}/entries/${id}`, {
       method: 'DELETE',
-      headers,
+      headers: getHeaders(),
     });
 
     if (!response.ok) {
@@ -99,7 +99,7 @@ export const api = {
   // Analytics
   async getStreakData(): Promise<StreakData> {
     const response = await fetch(`${API_BASE_URL}/streak`, {
-      headers,
+      headers: getHeaders(),
     });
 
     if (!response.ok) {
@@ -111,7 +111,7 @@ export const api = {
 
   async getHeatMapData(days: number = 365): Promise<HeatMapData[]> {
     const response = await fetch(`${API_BASE_URL}/heatmap?days=${days}`, {
-      headers,
+      headers: getHeaders(),
     });
 
     if (!response.ok) {
@@ -123,7 +123,7 @@ export const api = {
 
   async getAverageMoodData(): Promise<AverageMoodData> {
     const response = await fetch(`${API_BASE_URL}/average-mood`, {
-      headers,
+      headers: getHeaders(),
     });
 
     if (!response.ok) {
@@ -145,7 +145,7 @@ export const api = {
   }> {
     const response = await fetch(`${API_BASE_URL}/ai/query`, {
       method: 'POST',
-      headers,
+      headers: getHeaders(),
       body: JSON.stringify({ question, startDate, endDate }),
     });
 
@@ -159,7 +159,7 @@ export const api = {
 
   async checkAIHealth(): Promise<{ status: string; message: string }> {
     const response = await fetch(`${API_BASE_URL}/ai/health`, {
-      headers,
+      headers: getHeaders(),
     });
 
     if (!response.ok) {

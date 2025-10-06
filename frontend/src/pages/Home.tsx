@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
+import { useAuth } from '../contexts/AuthContext';
 import { api } from '../services/api';
 import { MoodType, StreakData, HeatMapData, AverageMoodData, Entry } from '../types';
 import { SideNav, View } from '../components/SideNav';
@@ -12,6 +13,7 @@ import './Home.css';
 export const Home: React.FC = () => {
   const { view } = useParams<{ view: string }>();
   const navigate = useNavigate();
+  const { logout } = useAuth();
   const currentView = (view as View) || 'journal';
   const [todayEntry, setTodayEntry] = useState<Entry | null>(null);
   const [allEntries, setAllEntries] = useState<Entry[]>([]);
@@ -129,7 +131,7 @@ export const Home: React.FC = () => {
 
   return (
     <div className="home">
-      <SideNav currentView={currentView} onViewChange={handleViewChange} />
+      <SideNav currentView={currentView} onViewChange={handleViewChange} onLogout={logout} />
       <div className="home__content">
         {renderView()}
       </div>

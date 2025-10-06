@@ -1,6 +1,7 @@
 import { AppDataSource } from './config/data-source';
 import { Entry } from './entities/Entry';
 import { User } from './entities/User';
+import bcrypt from 'bcrypt';
 
 const moods = ['amazing', 'good', 'okay', 'bad', 'terrible'] as const;
 
@@ -33,23 +34,24 @@ async function seed() {
     await AppDataSource.initialize();
     console.log('Database connection established');
 
-    // Get or create the default user (matching the frontend user ID)
+    // Get or create the user
     const userRepository = AppDataSource.getRepository(User);
-    const defaultUserId = '00000000-0000-0000-0000-000000000001';
 
     let user = await userRepository.findOne({
-      where: { id: defaultUserId }
+      where: { username: 'jared' }
     });
 
     if (!user) {
+      const passwordHash = await bcrypt.hash('Tiger123', 10);
       user = userRepository.create({
-        id: defaultUserId,
-        username: 'demo_user',
-        email: 'demo@example.com',
-        passwordHash: 'not-a-real-hash', // This is just for demo purposes
+        username: 'jared',
+        email: 'jared@example.com',
+        passwordHash,
       });
       await userRepository.save(user);
-      console.log('Created demo user');
+      console.log('Created user: jared');
+    } else {
+      console.log('User already exists: jared');
     }
 
     // Generate entries for the past N days

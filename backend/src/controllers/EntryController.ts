@@ -1,9 +1,7 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { EntryService } from '../services/EntryService';
 import { CreateEntryDto, UpdateEntryDto } from '../types';
-
-// Default user ID for prototype (no auth yet)
-const DEFAULT_USER_ID = '00000000-0000-0000-0000-000000000001';
+import { AuthRequest } from '../middleware/auth';
 
 export class EntryController {
   private entryService: EntryService;
@@ -12,10 +10,9 @@ export class EntryController {
     this.entryService = new EntryService();
   }
 
-  createEntry = async (req: Request, res: Response): Promise<void> => {
+  createEntry = async (req: AuthRequest, res: Response): Promise<void> => {
     try {
-      // TODO: Get userId from authenticated session
-      const userId = req.headers['x-user-id'] as string || DEFAULT_USER_ID;
+      const userId = req.userId!;
       const data: CreateEntryDto = req.body;
 
       const entry = await this.entryService.createEntry(userId, data);
@@ -30,9 +27,9 @@ export class EntryController {
     }
   };
 
-  updateEntry = async (req: Request, res: Response): Promise<void> => {
+  updateEntry = async (req: AuthRequest, res: Response): Promise<void> => {
     try {
-      const userId = req.headers['x-user-id'] as string || DEFAULT_USER_ID;
+      const userId = req.userId!;
       const { id } = req.params;
       const data: UpdateEntryDto = req.body;
 
@@ -48,9 +45,9 @@ export class EntryController {
     }
   };
 
-  deleteEntry = async (req: Request, res: Response): Promise<void> => {
+  deleteEntry = async (req: AuthRequest, res: Response): Promise<void> => {
     try {
-      const userId = req.headers['x-user-id'] as string || DEFAULT_USER_ID;
+      const userId = req.userId!;
       const { id } = req.params;
 
       await this.entryService.deleteEntry(userId, id);
@@ -65,9 +62,9 @@ export class EntryController {
     }
   };
 
-  getEntry = async (req: Request, res: Response): Promise<void> => {
+  getEntry = async (req: AuthRequest, res: Response): Promise<void> => {
     try {
-      const userId = req.headers['x-user-id'] as string || DEFAULT_USER_ID;
+      const userId = req.userId!;
       const { id } = req.params;
 
       const entry = await this.entryService.getEntry(userId, id);
@@ -84,9 +81,9 @@ export class EntryController {
     }
   };
 
-  getEntryByDate = async (req: Request, res: Response): Promise<void> => {
+  getEntryByDate = async (req: AuthRequest, res: Response): Promise<void> => {
     try {
-      const userId = req.headers['x-user-id'] as string || DEFAULT_USER_ID;
+      const userId = req.userId!;
       const { date } = req.params;
 
       const entry = await this.entryService.getEntryByDate(userId, new Date(date));
@@ -103,9 +100,9 @@ export class EntryController {
     }
   };
 
-  getEntries = async (req: Request, res: Response): Promise<void> => {
+  getEntries = async (req: AuthRequest, res: Response): Promise<void> => {
     try {
-      const userId = req.headers['x-user-id'] as string || DEFAULT_USER_ID;
+      const userId = req.userId!;
       const { startDate, endDate } = req.query;
 
       const entries = await this.entryService.getEntries(
@@ -121,9 +118,9 @@ export class EntryController {
     }
   };
 
-  getStreakData = async (req: Request, res: Response): Promise<void> => {
+  getStreakData = async (req: AuthRequest, res: Response): Promise<void> => {
     try {
-      const userId = req.headers['x-user-id'] as string || DEFAULT_USER_ID;
+      const userId = req.userId!;
 
       const streakData = await this.entryService.getStreakData(userId);
       res.json(streakData);
@@ -133,9 +130,9 @@ export class EntryController {
     }
   };
 
-  getHeatMapData = async (req: Request, res: Response): Promise<void> => {
+  getHeatMapData = async (req: AuthRequest, res: Response): Promise<void> => {
     try {
-      const userId = req.headers['x-user-id'] as string || DEFAULT_USER_ID;
+      const userId = req.userId!;
       const { days } = req.query;
 
       const heatMapData = await this.entryService.getHeatMapData(
@@ -150,9 +147,9 @@ export class EntryController {
     }
   };
 
-  getAverageMoodData = async (req: Request, res: Response): Promise<void> => {
+  getAverageMoodData = async (req: AuthRequest, res: Response): Promise<void> => {
     try {
-      const userId = req.headers['x-user-id'] as string || DEFAULT_USER_ID;
+      const userId = req.userId!;
 
       const averageMoodData = await this.entryService.getAverageMoodData(userId);
       res.json(averageMoodData);
