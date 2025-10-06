@@ -132,6 +132,159 @@
   white-space: pre-wrap;
 }
 
+/* Markdown styles */
+.entry-card__markdown {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--color-text-primary);
+}
+
+.entry-card__markdown h1,
+.entry-card__markdown h2,
+.entry-card__markdown h3,
+.entry-card__markdown h4,
+.entry-card__markdown h5,
+.entry-card__markdown h6 {
+  color: var(--color-text-primary);
+  font-weight: 600;
+  margin-top: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
+  line-height: 1.3;
+}
+
+.entry-card__markdown h1 {
+  font-size: 1.75rem;
+}
+
+.entry-card__markdown h2 {
+  font-size: 1.5rem;
+}
+
+.entry-card__markdown h3 {
+  font-size: 1.25rem;
+}
+
+.entry-card__markdown h4 {
+  font-size: 1.1rem;
+}
+
+.entry-card__markdown h5,
+.entry-card__markdown h6 {
+  font-size: 1rem;
+}
+
+.entry-card__markdown h1:first-child,
+.entry-card__markdown h2:first-child,
+.entry-card__markdown h3:first-child,
+.entry-card__markdown h4:first-child,
+.entry-card__markdown h5:first-child,
+.entry-card__markdown h6:first-child {
+  margin-top: 0;
+}
+
+.entry-card__markdown p {
+  margin-bottom: var(--spacing-md);
+}
+
+.entry-card__markdown p:last-child {
+  margin-bottom: 0;
+}
+
+.entry-card__markdown ul,
+.entry-card__markdown ol {
+  margin-bottom: var(--spacing-md);
+  padding-left: var(--spacing-xl);
+}
+
+.entry-card__markdown li {
+  margin-bottom: var(--spacing-xs);
+}
+
+.entry-card__markdown code {
+  background-color: var(--color-bg-tertiary);
+  padding: 0.125rem var(--spacing-xs);
+  border-radius: var(--radius-sm);
+  font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+  font-size: 0.875em;
+  color: var(--color-accent);
+}
+
+.entry-card__markdown pre {
+  background-color: var(--color-bg-tertiary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  overflow-x: auto;
+  margin-bottom: var(--spacing-md);
+}
+
+.entry-card__markdown pre code {
+  background-color: transparent;
+  padding: 0;
+  color: var(--color-text-primary);
+  font-size: 0.875rem;
+}
+
+.entry-card__markdown blockquote {
+  border-left: 3px solid var(--color-accent);
+  padding-left: var(--spacing-md);
+  margin-left: 0;
+  margin-bottom: var(--spacing-md);
+  color: var(--color-text-secondary);
+  font-style: italic;
+}
+
+.entry-card__markdown a {
+  color: var(--color-accent);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.entry-card__markdown a:hover {
+  color: var(--color-accent-hover);
+  text-decoration: underline;
+}
+
+.entry-card__markdown hr {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin: var(--spacing-lg) 0;
+}
+
+.entry-card__markdown strong {
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.entry-card__markdown em {
+  font-style: italic;
+}
+
+.entry-card__markdown img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+  margin: var(--spacing-md) 0;
+}
+
+.entry-card__markdown table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: var(--spacing-md);
+}
+
+.entry-card__markdown table th,
+.entry-card__markdown table td {
+  border: 1px solid var(--color-border);
+  padding: var(--spacing-sm);
+  text-align: left;
+}
+
+.entry-card__markdown table th {
+  background-color: var(--color-bg-tertiary);
+  font-weight: 600;
+}
+
 @media (max-width: 768px) {
   .journal-view__title {
     font-size: 1.5rem;

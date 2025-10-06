@@ -1,5 +1,6 @@
 import React from 'react';
 import { format } from 'date-fns';
+import ReactMarkdown from 'react-markdown';
 import { Entry, MoodType } from '../types';
 import { EntryForm } from './EntryForm';
 import { MoodIcon } from './MoodIcon';
@@ -106,7 +107,9 @@ export const JournalView: React.FC<JournalViewProps> = ({
                         <span>{entry.mood}</span>
                       </span>
                     </div>
-                    <p className="entry-card__text">{entry.content}</p>
+                    <div className="entry-card__markdown">
+                      <ReactMarkdown>{entry.content}</ReactMarkdown>
+                    </div>
                   </div>
                 </div>
               );
@@ -125,7 +128,9 @@ export const JournalView: React.FC<JournalViewProps> = ({
                         <span>{entry.mood}</span>
                       </span>
                     </div>
-                    <p className="entry-card__text">{entry.content}</p>
+                    <div className="entry-card__markdown">
+                      <ReactMarkdown>{entry.content}</ReactMarkdown>
+                    </div>
                   </div>
                 </div>
               );

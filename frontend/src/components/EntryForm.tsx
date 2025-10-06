@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import ReactMarkdown from 'react-markdown';
 import { MoodType, Entry } from '../types';
 import { MoodSelector } from './MoodSelector';
 import './EntryForm.css';
@@ -9,10 +10,13 @@ interface EntryFormProps {
   onCancel?: () => void;
 }
 
+type Tab = 'write' | 'preview';
+
 export const EntryForm: React.FC<EntryFormProps> = ({ entry, onSubmit, onCancel }) => {
   const [content, setContent] = useState('');
   const [mood, setMood] = useState<MoodType>(MoodType.OKAY);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [activeTab, setActiveTab] = useState<Tab>('write');
 
   useEffect(() => {
     if (entry) {
@@ -47,19 +51,43 @@ export const EntryForm: React.FC<EntryFormProps> = ({ entry, onSubmit, onCancel 
       <MoodSelector value={mood} onChange={setMood} />
 
       <div className="entry-form__field">
-        <label htmlFor="entry-content" className="entry-form__label">
-          What's on your mind?
-        </label>
-        <textarea
-          id="entry-content"
-          className="entry-form__textarea"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          placeholder="Write your thoughts here..."
-          rows={6}
-          disabled={isSubmitting}
-          required
-        />
+        <div className="entry-form__tabs">
+          <button
+            type="button"
+            className={`entry-form__tab ${activeTab === 'write' ? 'entry-form__tab--active' : ''}`}
+            onClick={() => setActiveTab('write')}
+          >
+            Write
+          </button>
+          <button
+            type="button"
+            className={`entry-form__tab ${activeTab === 'preview' ? 'entry-form__tab--active' : ''}`}
+            onClick={() => setActiveTab('preview')}
+          >
+            Preview
+          </button>
+        </div>
+
+        {activeTab === 'write' ? (
+          <textarea
+            id="entry-content"
+            className="entry-form__textarea"
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            placeholder="Write your thoughts here... (Markdown supported)"
+            rows={10}
+            disabled={isSubmitting}
+            required
+          />
+        ) : (
+          <div className="entry-form__preview">
+            {content.trim() ? (
+              <ReactMarkdown>{content}</ReactMarkdown>
+            ) : (
+              <p className="entry-form__preview-empty">Nothing to preview</p>
+            )}
+          </div>
+        )}
       </div>
 
       <div className="entry-form__actions">

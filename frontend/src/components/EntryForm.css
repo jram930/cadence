@@ -10,6 +10,35 @@
   margin-bottom: var(--spacing-lg);
 }
 
+.entry-form__tabs {
+  display: flex;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-sm);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.entry-form__tab {
+  padding: var(--spacing-sm) var(--spacing-lg);
+  background: none;
+  border: none;
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all var(--transition-fast);
+  margin-bottom: -1px;
+}
+
+.entry-form__tab:hover {
+  color: var(--color-text-primary);
+}
+
+.entry-form__tab--active {
+  color: var(--color-accent);
+  border-bottom-color: var(--color-accent);
+}
+
 .entry-form__label {
   display: block;
   font-size: 0.875rem;
@@ -44,6 +73,171 @@
 .entry-form__textarea:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+.entry-form__preview {
+  width: 100%;
+  min-height: 250px;
+  padding: var(--spacing-md);
+  background-color: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-primary);
+  font-size: 1rem;
+  line-height: 1.6;
+  overflow-y: auto;
+}
+
+.entry-form__preview-empty {
+  color: var(--color-text-tertiary);
+  font-style: italic;
+}
+
+/* Markdown preview styles */
+.entry-form__preview h1,
+.entry-form__preview h2,
+.entry-form__preview h3,
+.entry-form__preview h4,
+.entry-form__preview h5,
+.entry-form__preview h6 {
+  color: var(--color-text-primary);
+  font-weight: 600;
+  margin-top: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
+  line-height: 1.3;
+}
+
+.entry-form__preview h1 {
+  font-size: 1.75rem;
+}
+
+.entry-form__preview h2 {
+  font-size: 1.5rem;
+}
+
+.entry-form__preview h3 {
+  font-size: 1.25rem;
+}
+
+.entry-form__preview h4 {
+  font-size: 1.1rem;
+}
+
+.entry-form__preview h5,
+.entry-form__preview h6 {
+  font-size: 1rem;
+}
+
+.entry-form__preview h1:first-child,
+.entry-form__preview h2:first-child,
+.entry-form__preview h3:first-child,
+.entry-form__preview h4:first-child,
+.entry-form__preview h5:first-child,
+.entry-form__preview h6:first-child {
+  margin-top: 0;
+}
+
+.entry-form__preview p {
+  margin-bottom: var(--spacing-md);
+}
+
+.entry-form__preview p:last-child {
+  margin-bottom: 0;
+}
+
+.entry-form__preview ul,
+.entry-form__preview ol {
+  margin-bottom: var(--spacing-md);
+  padding-left: var(--spacing-xl);
+}
+
+.entry-form__preview li {
+  margin-bottom: var(--spacing-xs);
+}
+
+.entry-form__preview code {
+  background-color: var(--color-bg-tertiary);
+  padding: 0.125rem var(--spacing-xs);
+  border-radius: var(--radius-sm);
+  font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+  font-size: 0.875em;
+  color: var(--color-accent);
+}
+
+.entry-form__preview pre {
+  background-color: var(--color-bg-tertiary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  overflow-x: auto;
+  margin-bottom: var(--spacing-md);
+}
+
+.entry-form__preview pre code {
+  background-color: transparent;
+  padding: 0;
+  color: var(--color-text-primary);
+  font-size: 0.875rem;
+}
+
+.entry-form__preview blockquote {
+  border-left: 3px solid var(--color-accent);
+  padding-left: var(--spacing-md);
+  margin-left: 0;
+  margin-bottom: var(--spacing-md);
+  color: var(--color-text-secondary);
+  font-style: italic;
+}
+
+.entry-form__preview a {
+  color: var(--color-accent);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.entry-form__preview a:hover {
+  color: var(--color-accent-hover);
+  text-decoration: underline;
+}
+
+.entry-form__preview hr {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin: var(--spacing-lg) 0;
+}
+
+.entry-form__preview strong {
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.entry-form__preview em {
+  font-style: italic;
+}
+
+.entry-form__preview img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+  margin: var(--spacing-md) 0;
+}
+
+.entry-form__preview table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: var(--spacing-md);
+}
+
+.entry-form__preview table th,
+.entry-form__preview table td {
+  border: 1px solid var(--color-border);
+  padding: var(--spacing-sm);
+  text-align: left;
+}
+
+.entry-form__preview table th {
+  background-color: var(--color-bg-tertiary);
+  font-weight: 600;
 }
 
 .entry-form__actions {
