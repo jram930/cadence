@@ -1,6 +1,7 @@
 .journal-view {
-  max-width: 800px;
-  margin: 0 auto;
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
 }
 
 .journal-view__header {

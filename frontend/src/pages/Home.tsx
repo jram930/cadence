@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import { api } from '../services/api';
 import { MoodType, StreakData, HeatMapData, AverageMoodData, Entry } from '../types';
@@ -9,7 +10,9 @@ import { AIView } from '../components/AIView';
 import './Home.css';
 
 export const Home: React.FC = () => {
-  const [currentView, setCurrentView] = useState<View>('journal');
+  const { view } = useParams<{ view: string }>();
+  const navigate = useNavigate();
+  const currentView = (view as View) || 'journal';
   const [todayEntry, setTodayEntry] = useState<Entry | null>(null);
   const [allEntries, setAllEntries] = useState<Entry[]>([]);
   const [streakData, setStreakData] = useState<StreakData | null>(null);
@@ -120,9 +123,13 @@ export const Home: React.FC = () => {
     }
   };
 
+  const handleViewChange = (newView: View) => {
+    navigate(`/${newView}`);
+  };
+
   return (
     <div className="home">
-      <SideNav currentView={currentView} onViewChange={setCurrentView} />
+      <SideNav currentView={currentView} onViewChange={handleViewChange} />
       <div className="home__content">
         {renderView()}
       </div>
