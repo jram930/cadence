@@ -120,4 +120,40 @@ export const api = {
 
     return response.json();
   },
+
+  // AI
+  async queryAI(question: string, startDate?: string, endDate?: string): Promise<{
+    answer: string;
+    relevantEntries: Array<{
+      id: string;
+      date: string;
+      content: string;
+      mood: string;
+    }>;
+  }> {
+    const response = await fetch(`${API_BASE_URL}/ai/query`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({ question, startDate, endDate }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Failed to query AI');
+    }
+
+    return response.json();
+  },
+
+  async checkAIHealth(): Promise<{ status: string; message: string }> {
+    const response = await fetch(`${API_BASE_URL}/ai/health`, {
+      headers,
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to check AI health');
+    }
+
+    return response.json();
+  },
 };

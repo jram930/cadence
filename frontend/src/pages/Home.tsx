@@ -5,6 +5,7 @@ import { MoodType, StreakData, HeatMapData, Entry } from '../types';
 import { EntryForm } from '../components/EntryForm';
 import { StreakCounter } from '../components/StreakCounter';
 import { CalendarHeatMap } from '../components/CalendarHeatMap';
+import { AIChat } from '../components/AIChat';
 import './Home.css';
 
 export const Home: React.FC = () => {
@@ -100,6 +101,8 @@ export const Home: React.FC = () => {
         <StreakCounter data={streakData} loading={loading} />
 
         <CalendarHeatMap data={heatMapData} onDateClick={handleDateClick} />
+
+        <AIChat />
 
         <div className="entries-list">
           <h2 className="entries-list__title">Journal Entries</h2>

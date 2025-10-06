@@ -1,8 +1,10 @@
 import { Router } from 'express';
 import { EntryController } from '../controllers/EntryController';
+import { AIController } from '../controllers/AIController';
 
 const router = Router();
 const entryController = new EntryController();
+const aiController = new AIController();
 
 // Entry routes
 router.post('/entries', entryController.createEntry);
@@ -15,6 +17,10 @@ router.delete('/entries/:id', entryController.deleteEntry);
 // Analytics routes
 router.get('/streak', entryController.getStreakData);
 router.get('/heatmap', entryController.getHeatMapData);
+
+// AI routes
+router.post('/ai/query', aiController.query);
+router.get('/ai/health', aiController.health);
 
 // Health check
 router.get('/health', (req, res) => {
