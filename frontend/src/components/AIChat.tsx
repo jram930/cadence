@@ -9,7 +9,11 @@ interface RelevantEntry {
   mood: string;
 }
 
-export const AIChat: React.FC = () => {
+interface AIChatProps {
+  onQuerySent?: () => void;
+}
+
+export const AIChat: React.FC<AIChatProps> = ({ onQuerySent }) => {
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
   const [relevantEntries, setRelevantEntries] = useState<RelevantEntry[]>([]);
@@ -33,6 +37,11 @@ export const AIChat: React.FC = () => {
       setAnswer(result.answer);
       setRelevantEntries(result.relevantEntries);
       setShowResults(true);
+
+      // Notify parent that a query was sent
+      if (onQuerySent) {
+        onQuerySent();
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to query AI');
     } finally {

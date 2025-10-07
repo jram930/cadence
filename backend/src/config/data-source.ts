@@ -2,6 +2,7 @@ import { DataSource } from 'typeorm';
 import * as dotenv from 'dotenv';
 import { User } from '../entities/User';
 import { Entry } from '../entities/Entry';
+import { AiQueryUsage } from '../entities/AiQueryUsage';
 
 dotenv.config();
 
@@ -14,7 +15,7 @@ export const AppDataSource = new DataSource({
   database: process.env.DB_DATABASE || 'micro_journal',
   synchronize: process.env.NODE_ENV === 'development',
   logging: process.env.NODE_ENV === 'development',
-  entities: [User, Entry],
+  entities: [User, Entry, AiQueryUsage],
   migrations: ['src/migrations/**/*.ts'],
   subscribers: [],
 });
