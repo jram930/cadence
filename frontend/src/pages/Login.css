@@ -104,6 +104,26 @@
   cursor: not-allowed;
 }
 
+.login__toggle {
+  margin-top: var(--spacing-lg);
+  text-align: center;
+}
+
+.login__toggle-button {
+  background: none;
+  border: none;
+  color: var(--color-accent);
+  font-size: 0.875rem;
+  cursor: pointer;
+  padding: var(--spacing-sm);
+  transition: all var(--transition-fast);
+}
+
+.login__toggle-button:hover {
+  color: var(--color-accent-hover);
+  text-decoration: underline;
+}
+
 @media (max-width: 480px) {
   .login {
     padding: var(--spacing-md);
