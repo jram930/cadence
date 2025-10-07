@@ -114,9 +114,19 @@ Please provide a thoughtful, empathetic answer to their question based on the jo
         answer,
         relevantEntries: relevantEntries.slice(0, 5), // Return top 5 most recent
       };
-    } catch (error) {
-      console.error('Error querying Ollama:', error);
-      throw new Error('Failed to process AI query. Check your Anthropic API key.');
+    } catch (error: any) {
+      console.error('Error querying Anthropic:', error);
+
+      // Check for specific error types
+      if (error.status === 529) {
+        throw new Error('Anthropic API is temporarily overloaded. Please try again in a few moments.');
+      } else if (error.status === 401) {
+        throw new Error('Invalid Anthropic API key. Please check your .env file.');
+      } else if (error.status === 429) {
+        throw new Error('Rate limit exceeded. Please wait a moment and try again.');
+      }
+
+      throw new Error('Failed to process AI query: ' + (error.message || 'Unknown error'));
     }
   }
 

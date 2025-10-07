@@ -1,5 +1,6 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { AIService } from '../services/AIService';
+import { AuthRequest } from '../middleware/auth';
 
 export class AIController {
   private aiService: AIService;
@@ -8,14 +9,9 @@ export class AIController {
     this.aiService = new AIService();
   }
 
-  query = async (req: Request, res: Response): Promise<void> => {
+  query = async (req: AuthRequest, res: Response): Promise<void> => {
     try {
-      const userId = req.headers['x-user-id'] as string;
-
-      if (!userId) {
-        res.status(401).json({ error: 'User ID required' });
-        return;
-      }
+      const userId = req.userId!;
 
       const { question, startDate, endDate } = req.body;
 
@@ -39,7 +35,7 @@ export class AIController {
     }
   };
 
-  health = async (req: Request, res: Response): Promise<void> => {
+  health = async (req: AuthRequest, res: Response): Promise<void> => {
     try {
       const isConnected = await this.aiService.testConnection();
       res.json({
