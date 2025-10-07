@@ -1,7 +1,7 @@
 {
-  "name": "micro-journal-backend",
+  "name": "cadence-backend",
   "version": "1.0.0",
-  "description": "Backend API for Micro Journal app",
+  "description": "Backend API for Cadence - A journaling app",
   "main": "dist/index.js",
   "scripts": {
     "dev": "tsx watch src/index.ts",

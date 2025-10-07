@@ -13,7 +13,7 @@ export const SideNav: React.FC<SideNavProps> = ({ currentView, onViewChange, onL
   return (
     <nav className="sidenav">
       <div className="sidenav__header">
-        <h1 className="sidenav__title">Micro Journal</h1>
+        <h1 className="sidenav__title">Cadence</h1>
       </div>
 
       <div className="sidenav__items">

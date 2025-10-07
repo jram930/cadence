@@ -43,7 +43,7 @@ export const Login: React.FC<LoginProps> = ({ onLogin }) => {
     <div className="login">
       <div className="login__container">
         <div className="login__header">
-          <h1 className="login__title">Micro Journal</h1>
+          <h1 className="login__title">Cadence</h1>
           <p className="login__subtitle">Sign in to your account</p>
         </div>
 

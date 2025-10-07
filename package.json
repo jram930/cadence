@@ -1,8 +1,8 @@
 {
-  "name": "micro-journal",
+  "name": "cadence",
   "version": "1.0.0",
   "private": true,
-  "description": "A beautiful micro-journaling app with mood tracking and streak counters",
+  "description": "Cadence - A beautiful journaling app with mood tracking and streak counters",
   "scripts": {
     "setup": "npm run install:all && npm run docker:up && sleep 3 && npm run db:init",
     "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install",
