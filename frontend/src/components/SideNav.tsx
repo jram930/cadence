@@ -1,15 +1,16 @@
 import React from 'react';
 import './SideNav.css';
 
-export type View = 'journal' | 'stats' | 'ai' | 'about';
+export type View = 'journal' | 'stats' | 'ai' | 'about' | 'admin';
 
 interface SideNavProps {
   currentView: View;
   onViewChange: (view: View) => void;
   onLogout?: () => void;
+  isAdmin?: boolean;
 }
 
-export const SideNav: React.FC<SideNavProps> = ({ currentView, onViewChange, onLogout }) => {
+export const SideNav: React.FC<SideNavProps> = ({ currentView, onViewChange, onLogout, isAdmin = false }) => {
   return (
     <nav className="sidenav">
       <div className="sidenav__header">
@@ -62,6 +63,20 @@ export const SideNav: React.FC<SideNavProps> = ({ currentView, onViewChange, onL
           </svg>
           <span className="sidenav__label">About</span>
         </button>
+
+        {isAdmin && (
+          <button
+            className={`sidenav__item ${currentView === 'admin' ? 'sidenav__item--active' : ''}`}
+            onClick={() => onViewChange('admin')}
+          >
+            <svg className="sidenav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+              <line x1="3" y1="9" x2="21" y2="9"/>
+              <line x1="9" y1="21" x2="9" y2="9"/>
+            </svg>
+            <span className="sidenav__label">Admin</span>
+          </button>
+        )}
       </div>
 
       {onLogout && (

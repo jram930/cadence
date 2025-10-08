@@ -168,4 +168,18 @@ export const api = {
 
     return response.json();
   },
+
+  // Auth
+  async getCurrentUser(): Promise<{ id: string; username: string; email: string }> {
+    const response = await fetch(`${API_BASE_URL}/auth/me`, {
+      headers: getHeaders(),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch current user');
+    }
+
+    const data = await response.json();
+    return data.user;
+  },
 };

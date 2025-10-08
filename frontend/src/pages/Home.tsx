@@ -9,6 +9,7 @@ import { JournalView } from '../components/JournalView';
 import { StatsView } from '../components/StatsView';
 import { AIView } from '../components/AIView';
 import { AboutView } from '../components/AboutView';
+import { AdminView } from '../components/AdminView';
 import { Footer } from '../components/Footer';
 import './Home.css';
 
@@ -24,13 +25,24 @@ export const Home: React.FC = () => {
   const [averageMoodData, setAverageMoodData] = useState<AverageMoodData | null>(null);
   const [loading, setLoading] = useState(true);
   const [editMode, setEditMode] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const today = format(new Date(), 'yyyy-MM-dd');
 
   useEffect(() => {
     loadData();
     checkFirstTimeUser();
+    checkAdminStatus();
   }, []);
+
+  const checkAdminStatus = async () => {
+    try {
+      const user = await api.getCurrentUser();
+      setIsAdmin(user.username === 'jram930');
+    } catch (error) {
+      console.error('Error fetching user info:', error);
+    }
+  };
 
   const checkFirstTimeUser = () => {
     const hasVisited = localStorage.getItem('has_visited');
@@ -135,6 +147,8 @@ export const Home: React.FC = () => {
         return <AIView />;
       case 'about':
         return <AboutView />;
+      case 'admin':
+        return isAdmin ? <AdminView /> : null;
       default:
         return null;
     }
@@ -146,7 +160,7 @@ export const Home: React.FC = () => {
 
   return (
     <div className="home">
-      <SideNav currentView={currentView} onViewChange={handleViewChange} onLogout={logout} />
+      <SideNav currentView={currentView} onViewChange={handleViewChange} onLogout={logout} isAdmin={isAdmin} />
       <div className="home__content">
         {renderView()}
         <Footer />

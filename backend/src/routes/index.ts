@@ -2,12 +2,15 @@ import { Router } from 'express';
 import { EntryController } from '../controllers/EntryController';
 import { AIController } from '../controllers/AIController';
 import { AuthController } from '../controllers/AuthController';
+import { AdminController } from '../controllers/AdminController';
 import { authMiddleware } from '../middleware/auth';
+import { adminMiddleware } from '../middleware/admin';
 
 const router = Router();
 const entryController = new EntryController();
 const aiController = new AIController();
 const authController = new AuthController();
+const adminController = new AdminController();
 
 // Auth routes (public)
 router.post('/auth/signup', authController.signup);
@@ -31,6 +34,9 @@ router.get('/average-mood', authMiddleware, entryController.getAverageMoodData);
 router.post('/ai/query', authMiddleware, aiController.query);
 router.get('/ai/health', authMiddleware, aiController.health);
 router.get('/ai/rate-limit', authMiddleware, aiController.getRateLimit);
+
+// Admin routes (admin only)
+router.get('/admin/stats', authMiddleware, adminMiddleware, adminController.getStats);
 
 // Health check (public)
 router.get('/health', (req, res) => {
