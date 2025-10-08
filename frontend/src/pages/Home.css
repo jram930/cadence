@@ -13,8 +13,10 @@
 @media (max-width: 768px) {
   .home__content {
     margin-left: 0;
-    margin-top: 140px;
+    margin-top: 0;
+    margin-bottom: 0;
     padding: var(--spacing-lg);
+    padding-bottom: 80px; /* Space for bottom nav */
   }
 }
 
