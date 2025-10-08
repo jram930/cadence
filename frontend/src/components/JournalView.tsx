@@ -108,7 +108,13 @@ export const JournalView: React.FC<JournalViewProps> = ({
                       </span>
                     </div>
                     <div className="entry-card__markdown">
-                      <ReactMarkdown>{entry.content}</ReactMarkdown>
+                      <ReactMarkdown
+                        components={{
+                          p: ({ children }) => <p style={{ whiteSpace: 'pre-wrap' }}>{children}</p>
+                        }}
+                      >
+                        {entry.content}
+                      </ReactMarkdown>
                     </div>
                   </div>
                 </div>
@@ -129,7 +135,13 @@ export const JournalView: React.FC<JournalViewProps> = ({
                       </span>
                     </div>
                     <div className="entry-card__markdown">
-                      <ReactMarkdown>{entry.content}</ReactMarkdown>
+                      <ReactMarkdown
+                        components={{
+                          p: ({ children }) => <p style={{ whiteSpace: 'pre-wrap' }}>{children}</p>
+                        }}
+                      >
+                        {entry.content}
+                      </ReactMarkdown>
                     </div>
                   </div>
                 </div>
