@@ -9,6 +9,7 @@ import { JournalView } from '../components/JournalView';
 import { StatsView } from '../components/StatsView';
 import { AIView } from '../components/AIView';
 import { AboutView } from '../components/AboutView';
+import { Footer } from '../components/Footer';
 import './Home.css';
 
 export const Home: React.FC = () => {
@@ -148,6 +149,7 @@ export const Home: React.FC = () => {
       <SideNav currentView={currentView} onViewChange={handleViewChange} onLogout={logout} />
       <div className="home__content">
         {renderView()}
+        <Footer />
       </div>
     </div>
   );

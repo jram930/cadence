@@ -8,6 +8,8 @@
   margin-left: 240px;
   padding: var(--spacing-2xl);
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 @media (max-width: 768px) {
