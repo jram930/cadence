@@ -2,8 +2,6 @@
 
 A beautiful journaling app with mood tracking, streak counters, and calendar heat maps. Track the rhythm of your daily reflections.
 
-<img width="1197" height="1217" alt="image" src="https://github.com/user-attachments/assets/9a3ac8ab-d3fd-4764-848c-d4395e4e0754" />
-
 ## Tech Stack
 
 - **Frontend**: React + TypeScript + Vite
