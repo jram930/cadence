@@ -8,6 +8,7 @@ import { SideNav, View } from '../components/SideNav';
 import { JournalView } from '../components/JournalView';
 import { StatsView } from '../components/StatsView';
 import { AIView } from '../components/AIView';
+import { AboutView } from '../components/AboutView';
 import './Home.css';
 
 export const Home: React.FC = () => {
@@ -27,7 +28,18 @@ export const Home: React.FC = () => {
 
   useEffect(() => {
     loadData();
+    checkFirstTimeUser();
   }, []);
+
+  const checkFirstTimeUser = () => {
+    const hasVisited = localStorage.getItem('has_visited');
+    if (!hasVisited) {
+      // First time user - navigate to about page
+      navigate('/about');
+      // Mark as visited
+      localStorage.setItem('has_visited', 'true');
+    }
+  };
 
   const loadData = async () => {
     try {
@@ -120,6 +132,8 @@ export const Home: React.FC = () => {
         );
       case 'ai':
         return <AIView />;
+      case 'about':
+        return <AboutView />;
       default:
         return null;
     }
