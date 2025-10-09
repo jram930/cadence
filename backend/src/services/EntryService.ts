@@ -50,6 +50,14 @@ export class EntryService {
       throw new Error('Entry not found');
     }
 
+    // Check if entry is from today
+    const today = startOfDay(new Date());
+    const entryDate = startOfDay(new Date(entry.entryDate));
+
+    if (entryDate.getTime() !== today.getTime()) {
+      throw new Error('Cannot edit entries from previous days');
+    }
+
     if (data.content !== undefined) {
       entry.content = data.content;
     }
@@ -62,11 +70,23 @@ export class EntryService {
   }
 
   async deleteEntry(userId: string, entryId: string): Promise<void> {
-    const result = await this.entryRepository.delete({ id: entryId, userId });
+    const entry = await this.entryRepository.findOne({
+      where: { id: entryId, userId },
+    });
 
-    if (result.affected === 0) {
+    if (!entry) {
       throw new Error('Entry not found');
     }
+
+    // Check if entry is from today
+    const today = startOfDay(new Date());
+    const entryDate = startOfDay(new Date(entry.entryDate));
+
+    if (entryDate.getTime() !== today.getTime()) {
+      throw new Error('Cannot delete entries from previous days');
+    }
+
+    await this.entryRepository.delete({ id: entryId, userId });
   }
 
   async getEntry(userId: string, entryId: string): Promise<Entry | null> {

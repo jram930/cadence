@@ -87,8 +87,11 @@ export const Home: React.FC = () => {
 
       setEditMode(false);
       await loadData();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error saving entry:', error);
+      if (error.message === 'Cannot edit entries from previous days') {
+        alert('You can only edit today\'s entry. Previous entries are locked to preserve your journal history.');
+      }
       throw error;
     }
   };
@@ -113,8 +116,11 @@ export const Home: React.FC = () => {
     try {
       await api.deleteEntry(todayEntry.id);
       await loadData();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error deleting entry:', error);
+      if (error.message === 'Cannot delete entries from previous days') {
+        alert('You can only delete today\'s entry. Previous entries are locked to preserve your journal history.');
+      }
     }
   };
 

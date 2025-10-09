@@ -38,6 +38,8 @@ export class EntryController {
     } catch (error) {
       if (error instanceof Error && error.message === 'Entry not found') {
         res.status(404).json({ error: error.message });
+      } else if (error instanceof Error && error.message === 'Cannot edit entries from previous days') {
+        res.status(403).json({ error: error.message });
       } else {
         console.error('Error updating entry:', error);
         res.status(500).json({ error: 'Failed to update entry' });
@@ -55,6 +57,8 @@ export class EntryController {
     } catch (error) {
       if (error instanceof Error && error.message === 'Entry not found') {
         res.status(404).json({ error: error.message });
+      } else if (error instanceof Error && error.message === 'Cannot delete entries from previous days') {
+        res.status(403).json({ error: error.message });
       } else {
         console.error('Error deleting entry:', error);
         res.status(500).json({ error: 'Failed to delete entry' });
