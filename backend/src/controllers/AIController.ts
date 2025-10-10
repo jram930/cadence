@@ -88,4 +88,48 @@ export class AIController {
       });
     }
   };
+
+  enhanceNote = async (req: AuthRequest, res: Response): Promise<void> => {
+    try {
+      const userId = req.userId!;
+
+      // Check rate limit
+      const rateLimitCheck = await this.rateLimitService.checkRateLimit(userId);
+      if (!rateLimitCheck.allowed) {
+        res.status(429).json({
+          error: 'Rate limit exceeded',
+          remaining: rateLimitCheck.remaining,
+          resetTime: rateLimitCheck.resetTime,
+        });
+        return;
+      }
+
+      const { content, date } = req.body;
+
+      if (!content || typeof content !== 'string') {
+        res.status(400).json({ error: 'Content is required' });
+        return;
+      }
+
+      if (!date || typeof date !== 'string') {
+        res.status(400).json({ error: 'Date is required' });
+        return;
+      }
+
+      const enhancedContent = await this.aiService.enhanceNote(userId, content, date);
+
+      // Record the query usage
+      await this.rateLimitService.recordQuery(userId);
+
+      res.json({
+        enhancedContent,
+        remaining: rateLimitCheck.remaining - 1,
+      });
+    } catch (error) {
+      console.error('Error enhancing note:', error);
+      res.status(500).json({
+        error: error instanceof Error ? error.message : 'Internal server error',
+      });
+    }
+  };
 }

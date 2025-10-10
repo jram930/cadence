@@ -169,6 +169,21 @@ export const api = {
     return response.json();
   },
 
+  async enhanceNote(content: string, date: string): Promise<{ enhancedContent: string; remaining: number }> {
+    const response = await fetch(`${API_BASE_URL}/ai/enhance`, {
+      method: 'POST',
+      headers: getHeaders(),
+      body: JSON.stringify({ content, date }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Failed to enhance note');
+    }
+
+    return response.json();
+  },
+
   // Auth
   async getCurrentUser(): Promise<{ id: string; username: string; email: string }> {
     const response = await fetch(`${API_BASE_URL}/auth/me`, {

@@ -140,4 +140,82 @@ Please provide a thoughtful, empathetic answer to their question based on the jo
       return false;
     }
   }
+
+  async enhanceNote(userId: string, content: string, currentDate: string): Promise<string> {
+    // Fetch recent entries for context (last 30 days)
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+    const recentEntries = await this.entryRepository
+      .createQueryBuilder('entry')
+      .where('entry.userId = :userId', { userId })
+      .andWhere('entry.entryDate >= :startDate', { startDate: format(thirtyDaysAgo, 'yyyy-MM-dd') })
+      .andWhere('entry.entryDate != :currentDate', { currentDate }) // Exclude current entry
+      .orderBy('entry.entryDate', 'DESC')
+      .limit(10)
+      .getMany();
+
+    // Build context from recent entries to help with name completion and acronym expansion
+    let contextText = '';
+    if (recentEntries.length > 0) {
+      const contextEntries = recentEntries.map((entry) => {
+        return `${format(new Date(entry.entryDate), 'MMM d')}: ${entry.content.slice(0, 200)}`;
+      }).join('\n\n');
+      contextText = `\n\nRecent journal entries for context:\n${contextEntries}`;
+    }
+
+    const prompt = `You are an intelligent journal note enhancement assistant. Your job is to take a quick, shorthand journal entry and enhance it by:
+
+1. **Formatting**: Improve markdown formatting (headings, lists, emphasis)
+2. **Grammar & Spelling**: Fix any errors while preserving the user's voice
+3. **Context Enhancement**: Based on recent entries, expand abbreviations, add full names where you see patterns (e.g., if you see "John Smith" in context and "John" in the note, keep it as "John" but you might recognize common patterns)
+4. **Clarity**: Make the note more readable without changing its meaning
+5. **Preservation**: Keep the tone, voice, and core content intact - only polish and enhance
+
+IMPORTANT RULES:
+- Do NOT add new information or fabricate details
+- Do NOT change the user's meaning or intent
+- Keep personal shorthand if unclear (don't guess)
+- Return ONLY the enhanced note content, no explanations or meta-commentary
+- If the note is already well-formatted, make minimal changes
+
+Current note to enhance:
+${content}${contextText}
+
+Enhanced note:`;
+
+    try {
+      const apiKey = process.env.ANTHROPIC_API_KEY;
+      if (!apiKey || apiKey === 'your-api-key-here') {
+        throw new Error('Please configure your Anthropic API key to use AI enhancement features.');
+      }
+
+      const response = await this.anthropic.messages.create({
+        model: this.modelName,
+        max_tokens: 2048,
+        system: 'You are a journal enhancement assistant. Return only the enhanced note content, no explanations.',
+        messages: [
+          {
+            role: 'user',
+            content: prompt,
+          },
+        ],
+      });
+
+      const enhancedContent = response.content[0].type === 'text' ? response.content[0].text : content;
+      return enhancedContent.trim();
+    } catch (error: any) {
+      console.error('Error enhancing note:', error);
+
+      if (error.status === 529) {
+        throw new Error('AI service temporarily overloaded. Please try again.');
+      } else if (error.status === 401) {
+        throw new Error('Invalid API key.');
+      } else if (error.status === 429) {
+        throw new Error('Rate limit exceeded. Please wait a moment.');
+      }
+
+      throw new Error('Failed to enhance note: ' + (error.message || 'Unknown error'));
+    }
+  }
 }

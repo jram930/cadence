@@ -34,6 +34,7 @@ router.get('/average-mood', authMiddleware, entryController.getAverageMoodData);
 
 // AI routes (protected)
 router.post('/ai/query', authMiddleware, aiController.query);
+router.post('/ai/enhance', authMiddleware, aiController.enhanceNote);
 router.get('/ai/health', authMiddleware, aiController.health);
 router.get('/ai/rate-limit', authMiddleware, aiController.getRateLimit);
 
