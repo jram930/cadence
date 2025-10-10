@@ -43,3 +43,11 @@ export interface AverageMoodData {
   last30Days: number;
   last90Days: number;
 }
+
+export interface Tag {
+  id: string;
+  userId: string;
+  name: string;
+  usageCount: number;
+  createdAt: string;
+}

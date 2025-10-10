@@ -3,12 +3,15 @@ import { AppDataSource } from '../config/data-source';
 import { Entry } from '../entities/Entry';
 import { CreateEntryDto, UpdateEntryDto, StreakData, HeatMapData, AverageMoodData, MoodType } from '../types';
 import { startOfDay, subDays, differenceInDays, format } from 'date-fns';
+import { TagService } from './TagService';
 
 export class EntryService {
   private entryRepository: Repository<Entry>;
+  private tagService: TagService;
 
   constructor() {
     this.entryRepository = AppDataSource.getRepository(Entry);
+    this.tagService = new TagService();
   }
 
   async createEntry(userId: string, data: CreateEntryDto): Promise<Entry> {
@@ -38,7 +41,12 @@ export class EntryService {
       entryDate,
     });
 
-    return this.entryRepository.save(entry);
+    const savedEntry = await this.entryRepository.save(entry);
+
+    // Extract and save tags
+    await this.tagService.updateEntryTags(savedEntry.id, userId, data.content);
+
+    return savedEntry;
   }
 
   async updateEntry(userId: string, entryId: string, data: UpdateEntryDto): Promise<Entry> {
@@ -50,11 +58,18 @@ export class EntryService {
       throw new Error('Entry not found');
     }
 
-    // Check if entry is from today
-    const today = startOfDay(new Date());
-    const entryDate = startOfDay(new Date(entry.entryDate));
+    // Check if entry is from today (compare as date strings to avoid timezone issues)
+    const todayStr = format(new Date(), 'yyyy-MM-dd');
 
-    if (entryDate.getTime() !== today.getTime()) {
+    // Handle the entryDate - it could be a Date object or a string
+    let entryDateStr: string;
+    if (typeof entry.entryDate === 'string') {
+      entryDateStr = entry.entryDate.split('T')[0]; // Get just the date part if it's a string
+    } else {
+      entryDateStr = format(entry.entryDate, 'yyyy-MM-dd');
+    }
+
+    if (entryDateStr !== todayStr) {
       throw new Error('Cannot edit entries from previous days');
     }
 
@@ -66,7 +81,14 @@ export class EntryService {
       entry.mood = data.mood;
     }
 
-    return this.entryRepository.save(entry);
+    const savedEntry = await this.entryRepository.save(entry);
+
+    // Update tags if content changed
+    if (data.content !== undefined) {
+      await this.tagService.updateEntryTags(savedEntry.id, userId, savedEntry.content);
+    }
+
+    return savedEntry;
   }
 
   async deleteEntry(userId: string, entryId: string): Promise<void> {
@@ -78,11 +100,11 @@ export class EntryService {
       throw new Error('Entry not found');
     }
 
-    // Check if entry is from today
-    const today = startOfDay(new Date());
-    const entryDate = startOfDay(new Date(entry.entryDate));
+    // Check if entry is from today (compare as date strings to avoid timezone issues)
+    const todayStr = format(new Date(), 'yyyy-MM-dd');
+    const entryDateStr = format(new Date(entry.entryDate), 'yyyy-MM-dd');
 
-    if (entryDate.getTime() !== today.getTime()) {
+    if (entryDateStr !== todayStr) {
       throw new Error('Cannot delete entries from previous days');
     }
 
@@ -96,14 +118,16 @@ export class EntryService {
   }
 
   async getEntryByDate(userId: string, date: Date): Promise<Entry | null> {
-    let entryDate: Date;
+    // Extract just the date part as a string (YYYY-MM-DD)
     const dateStr = typeof date === 'string' ? date : date.toISOString();
-    const [year, month, day] = dateStr.split('T')[0].split('-').map(Number);
-    entryDate = new Date(year, month - 1, day);
+    const datePart = dateStr.split('T')[0]; // e.g., "2025-10-09"
 
-    return this.entryRepository.findOne({
-      where: { userId, entryDate },
-    });
+    // Query using the date string directly to avoid timezone issues
+    return this.entryRepository
+      .createQueryBuilder('entry')
+      .where('entry.userId = :userId', { userId })
+      .andWhere('entry.entryDate = :entryDate', { entryDate: datePart })
+      .getOne();
   }
 
   async getEntries(userId: string, startDate?: Date, endDate?: Date): Promise<Entry[]> {

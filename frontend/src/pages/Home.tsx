@@ -10,6 +10,8 @@ import { StatsView } from '../components/StatsView';
 import { AIView } from '../components/AIView';
 import { AboutView } from '../components/AboutView';
 import { AdminView } from '../components/AdminView';
+import { TagsView } from '../components/TagsView';
+import { TaggedEntriesView } from '../components/TaggedEntriesView';
 import { Footer } from '../components/Footer';
 import './Home.css';
 
@@ -26,6 +28,7 @@ export const Home: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [editMode, setEditMode] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [selectedTag, setSelectedTag] = useState<string | null>(null);
 
   const today = format(new Date(), 'yyyy-MM-dd');
 
@@ -151,6 +154,15 @@ export const Home: React.FC = () => {
         );
       case 'ai':
         return <AIView />;
+      case 'tags':
+        return selectedTag ? (
+          <TaggedEntriesView
+            tagName={selectedTag}
+            onBack={() => setSelectedTag(null)}
+          />
+        ) : (
+          <TagsView onTagClick={(tagName) => setSelectedTag(tagName)} />
+        );
       case 'about':
         return <AboutView />;
       case 'admin':

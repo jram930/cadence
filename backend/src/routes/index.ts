@@ -3,6 +3,7 @@ import { EntryController } from '../controllers/EntryController';
 import { AIController } from '../controllers/AIController';
 import { AuthController } from '../controllers/AuthController';
 import { AdminController } from '../controllers/AdminController';
+import { TagController } from '../controllers/TagController';
 import { authMiddleware } from '../middleware/auth';
 import { adminMiddleware } from '../middleware/admin';
 
@@ -11,6 +12,7 @@ const entryController = new EntryController();
 const aiController = new AIController();
 const authController = new AuthController();
 const adminController = new AdminController();
+const tagController = new TagController();
 
 // Auth routes (public)
 router.post('/auth/signup', authController.signup);
@@ -37,6 +39,10 @@ router.get('/ai/rate-limit', authMiddleware, aiController.getRateLimit);
 
 // Admin routes (admin only)
 router.get('/admin/stats', authMiddleware, adminMiddleware, adminController.getStats);
+
+// Tag routes (protected)
+router.get('/tags', authMiddleware, tagController.getTags);
+router.get('/tags/:tagName/entries', authMiddleware, tagController.getEntriesByTag);
 
 // Health check (public)
 router.get('/health', (req, res) => {

@@ -1,4 +1,4 @@
-import { Entry, CreateEntryDto, UpdateEntryDto, StreakData, HeatMapData, AverageMoodData } from '../types';
+import { Entry, CreateEntryDto, UpdateEntryDto, StreakData, HeatMapData, AverageMoodData, Tag } from '../types';
 
 const API_BASE_URL = '/api';
 
@@ -181,5 +181,30 @@ export const api = {
 
     const data = await response.json();
     return data.user;
+  },
+
+  // Tags
+  async getTags(): Promise<Tag[]> {
+    const response = await fetch(`${API_BASE_URL}/tags`, {
+      headers: getHeaders(),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch tags');
+    }
+
+    return response.json();
+  },
+
+  async getEntriesByTag(tagName: string): Promise<Entry[]> {
+    const response = await fetch(`${API_BASE_URL}/tags/${encodeURIComponent(tagName)}/entries`, {
+      headers: getHeaders(),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch entries by tag');
+    }
+
+    return response.json();
   },
 };
