@@ -61,13 +61,8 @@ export class EntryService {
     // Check if entry is from today (compare as date strings to avoid timezone issues)
     const todayStr = format(new Date(), 'yyyy-MM-dd');
 
-    // Handle the entryDate - it could be a Date object or a string
-    let entryDateStr: string;
-    if (typeof entry.entryDate === 'string') {
-      entryDateStr = entry.entryDate.split('T')[0]; // Get just the date part if it's a string
-    } else {
-      entryDateStr = format(entry.entryDate, 'yyyy-MM-dd');
-    }
+    // Format the entry date - handle both Date objects and string representations
+    const entryDateStr = format(new Date(entry.entryDate), 'yyyy-MM-dd');
 
     if (entryDateStr !== todayStr) {
       throw new Error('Cannot edit entries from previous days');

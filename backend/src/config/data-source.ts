@@ -5,8 +5,10 @@ import { Entry } from '../entities/Entry';
 import { AiQueryUsage } from '../entities/AiQueryUsage';
 import { Tag } from '../entities/Tag';
 import { EntryTag } from '../entities/EntryTag';
+import * as path from 'path';
 
-dotenv.config();
+// Load .env from backend directory explicitly
+dotenv.config({ path: path.join(__dirname, '../../.env') });
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
