@@ -10,12 +10,15 @@ A beautiful journaling app with mood tracking, AI-powered insights, and analytic
 - 😊 **Mood Tracking** - Track how you're feeling with five distinct mood levels
 - 🔥 **Streak Counter** - Stay motivated with daily, longest, and total entry counts
 - 📅 **Heat Map Visualization** - See your journaling patterns at a glance with a year-long calendar
+- ✨ **AI Note Enhancement** - Transform shorthand notes into polished entries with one click - AI improves formatting, fixes grammar, and adds context from your previous entries
 - 🤖 **AI Insights** - Ask questions about your entries and get thoughtful insights powered by Claude AI
+- 🏷️ **Smart Tags** - Organize entries with automatic hashtag detection and filtering
 - 📊 **Analytics Dashboard** - View average mood trends and journaling statistics
 - 📱 **Mobile Friendly** - Responsive design with bottom navigation for mobile devices
 - 🎨 **Beautiful UI** - Clean, modern interface with orange accent theme
 - 🔐 **Secure Authentication** - JWT-based auth with bcrypt password hashing
 - ⚡ **Rate Limiting** - Smart AI query limits (5 per hour) to manage API usage
+- 🔒 **Edit Protection** - Lock entries after the day passes to preserve journal history
 
 ## 🚀 Tech Stack
 
@@ -111,11 +114,11 @@ cadence/
 │   ├── src/
 │   │   ├── config/       # Database and app configuration
 │   │   ├── controllers/  # Request handlers
-│   │   ├── entities/     # TypeORM entities (User, Entry, AiQueryUsage)
+│   │   ├── entities/     # TypeORM entities (User, Entry, Tag, EntryTag, AiQueryUsage)
 │   │   ├── migrations/   # Database migrations
 │   │   ├── routes/       # API routes
-│   │   ├── services/     # Business logic (AI, Auth, Rate limiting)
-│   │   ├── middleware/   # Auth middleware
+│   │   ├── services/     # Business logic (AI, Auth, Tags, Rate limiting)
+│   │   ├── middleware/   # Auth and admin middleware
 │   │   └── types/        # TypeScript types
 │   ├── Dockerfile
 │   └── package.json
@@ -174,6 +177,12 @@ npm run lint      # Run ESLint
 - Journal entries with mood tracking
 - One entry per user per day (enforced by unique index)
 - Markdown content support
+- Only editable on the day they're created
+
+### Tags
+- User-specific tag system with automatic hashtag detection
+- Many-to-many relationship with entries via EntryTag junction table
+- Usage count tracking for popular tags
 
 ### AI Query Usage
 - Tracks AI query usage for rate limiting
@@ -192,8 +201,12 @@ npm run lint      # Run ESLint
 - `GET /api/entries` - Get all entries (with date filters)
 - `GET /api/entries/:id` - Get specific entry
 - `GET /api/entries/date/:date` - Get entry for specific date
-- `PUT /api/entries/:id` - Update entry
-- `DELETE /api/entries/:id` - Delete entry
+- `PUT /api/entries/:id` - Update entry (only today's entry)
+- `DELETE /api/entries/:id` - Delete entry (only today's entry)
+
+### Tags
+- `GET /api/tags` - Get all user tags with usage counts
+- `GET /api/tags/:tagName/entries` - Get entries with specific tag
 
 ### Analytics
 - `GET /api/streak` - Get streak statistics
@@ -202,8 +215,12 @@ npm run lint      # Run ESLint
 
 ### AI (Requires Anthropic API Key)
 - `POST /api/ai/query` - Ask questions about entries
+- `POST /api/ai/enhance` - Enhance note with AI (formatting, grammar, context)
 - `GET /api/ai/rate-limit` - Check remaining queries
 - `GET /api/ai/health` - Check AI service health
+
+### Admin
+- `GET /api/admin/stats` - Get system statistics (admin only)
 
 ## 🚀 Deployment
 
